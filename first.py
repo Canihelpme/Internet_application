@@ -86,11 +86,14 @@ class Set:
                 pass
         return res.extend(res2)
     
-    def add(self, other):
-        res = []
-        for x in other:
-            res.apppend(x)
-        return res
+    def add(self, elem):      
+        self.concat(elem)
+        return self
+    def remove(self, elem):
+        for i in range(len(self.data)-1):
+            if self.data[i] == elem:
+                self.data.pop(i)
+        return self
     
     
     
@@ -112,5 +115,6 @@ print(a.issuperset(b))
 print(a.intersection_update(b))
 print(a.difference_update(b))
 print(a.symmetric_difference_update(b))
-print(a.add(b))
+print(a.add(9))
+print(a.remove(3))
 
