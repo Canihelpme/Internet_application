@@ -1,6 +1,7 @@
 suits = 'CDHS'
 ranks = '23456789TJQKA'
 values = dict(zip(ranks, range(2, 2+len(ranks))))
+print(values)
 
 
 # In[ ]:
@@ -42,11 +43,13 @@ def classify_by_rank(cards):
     card = []
     for i in cards_num:
         card.append(list(i))
+        print(card)
     temp = []
     for i in card:
         if i[0] in values.keys():
             temp.append(values[i[0]])
     temp.sort()
+    print(temp)
     dic = {}
     for i in card:
         if i[0] not in dic:
@@ -54,6 +57,7 @@ def classify_by_rank(cards):
             dic[i[0]].append(''.join(i))
         else:
             dic[i[0]].append(''.join(i))
+       
     return dic
 
 def find_a_kind(cards):
@@ -114,3 +118,6 @@ if __name__ == "__main__":
     print(tell_hand_ranking('2S 2D 4C 4S 7C'))
     print(tell_hand_ranking('2S 2D 3S 5D JD'))
     print(tell_hand_ranking('2S 3D 5C 7D KH'))
+
+
+# %%
