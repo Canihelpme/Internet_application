@@ -2,7 +2,6 @@
 # Constants
 suits = 'CDHS'
 ranks = '23456789TJQKA'
-complex = dict(zip(ranks, range(2, 2+len(ranks))))
 
 from abc import ABCMeta, abstractmethod
 
@@ -16,7 +15,7 @@ class Card(metaclass=ABCMeta):
         
     def __repr__(self):
         return self.card
-    
+
     @abstractmethod
     def value(self):
         """Subclasses should implement this method"""
@@ -32,13 +31,8 @@ class Card(metaclass=ABCMeta):
 
 class PKCard(Card):
     def value(self):
-        card = []
-        card.append(list(self))
-        print(card)
-        temp = []
-        if self[0] in complex.keys():
-            temp.append(complex[self[0]])
-        print(temp)
+        dic = dict(zip(ranks, range(2, 2+len(ranks))))
+        return dic.get(self.card[0])
         pass
 
 if __name__ == '__main__':
@@ -48,17 +42,59 @@ if __name__ == '__main__':
 
     print(f'{c1} {c2} {c3}')
 
-    # comparison
     print(c1 > c2 == c3)
 
-    # sorting
     cards = [c1, c2, c3, PKCard('AS'), PKCard('2D')]
     sorted_cards = sorted(cards)
     print(sorted_cards)
     cards.sort()
     print(cards) 
 
+import random
+class Deck:
+    def __init__(self, cls):
+        cls = []
+        for k in suits:
+            for i in range(2+len(ranks)):
+                cls.append((k,i))
+        return(cls)
+    
+    """def shuffle(self):
+        random.shuffle(a)
+        pass"""
 
+    def pop(self):
+        if self.is_empty():
+            return -1
+        return self.stack.pop()
+
+    def __str__(self):
+        return super().__str__()
+    
+    def __len__(self):
+        return len(self) 
+
+if __name__ == '__main__':
+    deck = Deck(PKCard)  # deck of poker cards
+    """deck.shuffle()"""
+    c = deck[0]
+    print('A deck of', c.__class__.__name__)
+    print(deck)
+    """
+    # testing __getitem__ method
+    print(deck[-5:])
+
+    while len(deck) >= 10:
+        my_hand = []
+        your_hand = []
+        for i in range(5):
+            for hand in (my_hand, your_hand):
+                card = deck.pop()
+                hand.append(card)
+        my_hand.sort(reverse=True)
+        your_hand.sort(reverse=True)
+        print(my_hand, '>', your_hand, '?', my_hand > your_hand)
+"""
     
     
 
