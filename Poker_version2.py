@@ -8,6 +8,7 @@ from abc import ABCMeta, abstractmethod
 class Card(metaclass=ABCMeta):
     """Abstact class for playing cards
     """
+
     def __init__(self, rank_suit):
         if rank_suit[0] not in ranks or rank_suit[1] not in suits:
             raise ValueError(f'{rank_suit}: illegal card')
@@ -53,15 +54,17 @@ if __name__ == '__main__':
 import random
 class Deck:
     def __init__(self, cls):
-        cls = []
-        for k in suits:
-            for i in range(2+len(ranks)):
-                cls.append((k,i))
-        return(cls)
+        self.cards = [cls(suit, rank) for suit in self.suits for rank in self.ranks] # (4)
+
+    def __len__(self):
+        return len(self.cards)                              # (5)
+
+    def __getitem__(self, position):
+        return self.cards[position]
     
-    """def shuffle(self):
-        random.shuffle(a)
-        pass"""
+    def shuffle(self):
+        random.shuffle(self)
+        return self
 
     def pop(self):
         if self.is_empty():
@@ -70,9 +73,6 @@ class Deck:
 
     def __str__(self):
         return super().__str__()
-    
-    def __len__(self):
-        return len(self) 
 
 if __name__ == '__main__':
     deck = Deck(PKCard)  # deck of poker cards
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     c = deck[0]
     print('A deck of', c.__class__.__name__)
     print(deck)
-    """
+    
     # testing __getitem__ method
     print(deck[-5:])
 
@@ -94,7 +94,7 @@ if __name__ == '__main__':
         my_hand.sort(reverse=True)
         your_hand.sort(reverse=True)
         print(my_hand, '>', your_hand, '?', my_hand > your_hand)
-"""
+
     
     
 
