@@ -5,7 +5,7 @@
 - echoserv.py
 
 ## echo/
-## eccho/clients/
+## echo/clients/
 - client_wrong.py: incorrect version
 - client_shutdown.py: receive more data after shutdown
 - client_makefile.py: converting socket to file-like object
