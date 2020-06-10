@@ -8,7 +8,7 @@ def echo_client(server_addr):
     print(sock)
     while True:
         message = sys.stdin.readline()
-        if not message:
+        if not message:     # reading 0 bytes means EoF
             break
         sock.send(message.encode('utf-8'))      # send message to server
         data = sock.recv(1024).decode('utf-8')  # receive response up to 1KB

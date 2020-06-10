@@ -10,7 +10,7 @@ def echo_server(my_port):
     sock.bind(('', my_port))        # bind it to my any IP and port number
                                     # '' represents all available interfaces on host
     sock.listen(5)                  # listen, allow 5 pending connects
-    print('Server started')
+    print('Server started:', sock.getsockname())
     while True:                     # do forever (until process killed)
         conn, cli_addr = sock.accept()  # wait for next client connect
                                     # conn: new socket, addr: client addr

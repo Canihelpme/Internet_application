@@ -1,5 +1,12 @@
 # Network Programming
 
+## docs/
+- np1.ipython: introduction to NP
+- np2.md: Network programing: clients
+- np3.md: Network programming: servers
+- iot.ipynb: Client/Server for IoT - an example code
+- http.ipynb: HTTP protocols
+
 ## intro/
 - echocli.py
 - echoserv.py

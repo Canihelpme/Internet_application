@@ -15,7 +15,7 @@ def client(server_addr):
 
     sent_bytes = []
     recv_bytes = []
-    for message in msg.msgs(20, length=2000):  # generate 20 msgs
+    for message in msg.msgs(100, length=1400):  # generate 100 msgs
         n_sent = sock.send(message) # send message to server
         sent_bytes.append(n_sent)
         data = sock.recv(2048)      # receive response from server

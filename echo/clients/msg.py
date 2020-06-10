@@ -1,14 +1,15 @@
 import time
 
-def msgs(n, length=1000, delay=None):
+def msgs(n, length=1000):
     """Generate n messages of length ending with new line char
+    including extra delay in seconds
     """
 
+    if length < 6:
+        length = 6
     msg = bytearray(b'00000' + (length-6) * b'a' + b'\n')
 
     for i in range(1, n+1):
-        if delay is not None:
-            time.sleep(delay)
         msg[:5] = b'%5.5d' % i
         yield msg
 
