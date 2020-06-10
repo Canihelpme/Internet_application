@@ -14,7 +14,7 @@ class Client(threading.Thread):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect(server_addr)
         # convert socket to file-like obj only for imcoming messages
-        self.in_file = self.sock.makefile('rb')
+        self.rfile = self.sock.makefile('rb')
         self.sent_bytes = []
         self.recv_bytes = []
 
@@ -23,7 +23,7 @@ class Client(threading.Thread):
         for message in msg.msgs(20, length=2000):
             n_sent = self.sock.send(message)
             self.sent_bytes.append(n_sent)
-            data = self.in_file.readline()      # receive response
+            data = self.rfile.readline()      # receive response
             if not data:
                 print('Server closing')
                 break
@@ -31,7 +31,7 @@ class Client(threading.Thread):
         self.sock.close()                       # to send eof to server
 
 if __name__ == '__main__':
-    usage = 'Usage: clients.py host:port [n]'
+    usage = 'Usage: python clients.py host:port [n]'
     n_clients = 3
     try:
         if len(sys.argv) in (2, 3):

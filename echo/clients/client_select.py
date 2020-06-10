@@ -13,20 +13,23 @@ def client(server_addr):
 
     sel = selectors.DefaultSelector()
     sel.register(sock, selectors.EVENT_READ | selectors.EVENT_WRITE)
-    it = iter(msg.msgs(100, length=2000))  # convert as iterable
+    it = msg.msgs(100, length=2000))  # generator is iterable
     sent_bytes = []
     recv_bytes = []
     keep_running = True
 
     while keep_running:
-        events = sel.select(timeout=1)
+        events = sel.select(timeout=1)   # wake up every 1 sec even though no events
+
+        if not events:  # timeout event occurs
+            print('timeout')
+            continue
 
         for key, mask in events:
             conn = key.fileobj
 
             # recv if socket becomes readable
             if mask & selectors.EVENT_READ:
-                print('readable')
                 data = conn.recv(2048)
                 if not data:
                     print('Server closing')
@@ -34,10 +37,10 @@ def client(server_addr):
                     keep_running = False
                     break
                 recv_bytes.append(len(data))
+                print('recv:', len(data))
 
             # sendall if socket becomes writable
             if mask & selectors.EVENT_WRITE:
-                print('writable')
                 try:
                     message = next(it)
                 except StopIteration:  # no more messages
@@ -45,11 +48,9 @@ def client(server_addr):
                     sel.modify(conn, selectors.EVENT_READ)
                     conn.shutdown(socket.SHUT_WR)
                     break
-                conn.sendall(message)
+                conn.sendall(message)   # send the entire message even though non-blocking mode
                 sent_bytes.append(len(message))
-
-            # if mask & (selectors.EVENT_WRITE | selectors.EVENT_READ):
-            #     print('timeout')
+                print('send:', len(message))
 
         # end for
     # end while

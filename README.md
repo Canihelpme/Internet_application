@@ -17,11 +17,12 @@
 - client_shutdown.py: receive more data after shutdown
 - client_makefile.py: converting socket to file-like object
 - client_thread.py: multi-threading
+- client_select.py: I/O multiplexing
 - client_class.py: class implementation
 - clients.py: running multiple clients for testing servers<br>
     Usage:
     ```bash
-    python clients.py [<n>]   # run n(=3, default) clients
+    python clients.py host:port [n]   # run n(=3, default) clients
     ```
 
 ### echo/servers/

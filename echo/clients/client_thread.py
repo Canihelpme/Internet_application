@@ -12,6 +12,8 @@ def recv_loop(sock):
             print('Server closing')
             break
         recv_bytes.append(len(data))
+        print('recv:', len(data))
+    print("recv_loop terminated")
 
 def client(server_addr):
     """Client - sending and receiving threads
@@ -27,6 +29,8 @@ def client(server_addr):
     for message in msg.msgs(20, length=2000):
         n_sent = sock.send(message)
         sent_bytes.append(n_sent)
+        print('send:', n_sent)
+    print("sending loop teminated")
     sock.shutdown(socket.SHUT_WR)     # send FIN. This will stop receiver thread
     receiver.join()                   # wait for receiver exit
     sock.close()

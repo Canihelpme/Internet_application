@@ -10,7 +10,7 @@ class Client:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect(server_addr)      # connect to server process
         # convert socket to file-like obj only for imcoming messages
-        self.in_file = self.sock.makefile('rb')
+        self.rfile = self.sock.makefile('rb')
         self.sent_bytes = []
         self.recv_bytes = []
 
@@ -18,7 +18,7 @@ class Client:
         for message in msg.msgs(20, length=2000, delay=0.5):
             n_sent = self.sock.send(message)
             self.sent_bytes.append(n_sent)
-            data = self.in_file.readline() # receive response
+            data = self.rfile.readline() # receive response
             if not data:
                 print('Server closing')
                 break

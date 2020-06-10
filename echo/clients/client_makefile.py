@@ -8,21 +8,22 @@ def client(server_addr):
     """
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect(server_addr)       # connect to server process
-    # Note: binary mode preserve the data
-    #       does not convert encodings and line ending as in text mode.
-    file = sock.makefile('rwb')     # file-like obj in read/write binary mode
-
+    # file-like obj in read/write binary mode  
+    # Note: binary mode preserve the data (not convert encodings and line ending)
+   
+    rfile = sock.makefile('rb')    # incoming stream
+    wfile = sock.makefile('wb')   # outgoing stream
     sent_bytes = []
     recv_bytes = []
     for message in msg.msgs(20, length=2000):
-        n_sent = file.write(message)
-        file.flush()     # flush-out buffer to send immediately
+        n_sent = wfile.write(message)
+        wfile.flush()     # flush-out user buffer to send immediately
         sent_bytes.append(n_sent)
-        data = file.readline()     # receive response
-        if not data:
+        data = rfile.readline()     # incoming line message
+        if not data:                 # check if server terminates abnormally
+            print('Server abnormally terminated')
             break
         recv_bytes.append(len(data))
-    file.close()
     sock.close()
     msg.report(sent_bytes, recv_bytes)
 
