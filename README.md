@@ -1,6 +1,7 @@
 # Network Programming
 
 ## docs/
+- socketAPI.md: TCP Socket API
 - np1.ipython: introduction to NP
 - np2.md: Network programing: clients
 - np3.md: Network programming: servers
