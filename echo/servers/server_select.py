@@ -7,7 +7,7 @@ from socket import socket, AF_INET, SOCK_STREAM, SHUT_WR
 import selectors
 import logging
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
 sel = selectors.DefaultSelector()
 
 # call-back when listening socket is ready
