@@ -8,37 +8,38 @@ class Client(threading.Thread):
     incoming stream: using file-like object (buffered)
                      assuming response messages are separated by new line
     """
-    def __init__(self, server_addr):
+    def __init__(self, server_addr, n_mesg):
         threading.Thread.__init__(self)
 
+        self.n_mesg = n_mesg
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect(server_addr)
+        print(f'Connected to server: {server_addr}')
         # convert socket to file-like obj only for imcoming messages
         self.rfile = self.sock.makefile('rb')
-        self.sent_bytes = []
-        self.recv_bytes = []
 
     def run(self):
-        print('%s started' % self.getName())
-        for message in msg.msgs(20, length=2000):
+        print(f'{self.getName()} starts')
+        for message in msg.msgs(n_mesg, length=2000):
             n_sent = self.sock.send(message)
-            self.sent_bytes.append(n_sent)
+            print(f'send {n_sent} bytes')
             data = self.rfile.readline()      # receive response
             if not data:
                 print('Server closing')
                 break
-            self.recv_bytes.append(len(data))
-        self.sock.close()                       # to send eof to server
+            print(f'recv {len(data)} bytes')
+        self.sock.close()                     # to send eof to server
 
 if __name__ == '__main__':
-    usage = 'Usage: python clients.py host:port [n]'
+    usage = 'Usage: python clients.py host:port <# of msgs> [<# of clients>]'
     n_clients = 3
     try:
-        if len(sys.argv) in (2, 3):
+        if len(sys.argv) in (3, 4):
             host, port = sys.argv[1].split(':')
             port = int(port)
-            if len(sys.argv) == 3:
-                n_clients = int(sys.argv[2])
+            n_mesg = int(sys.argv[2])
+            if len(sys.argv) == 4:
+                n_clients = int(sys.argv[3])
         else:
             print(usage)
     except Exception as e:
@@ -47,12 +48,12 @@ if __name__ == '__main__':
     # create and start n client thread objects
     threads = []
     for i in range(n_clients):
-        cli = Client((host, port))
+        cli = Client((host, port), n_mesg)
         cli.start()
         threads.append(cli)
 
-    # Wait for terminating child threads
+    # Wait for child threads to terminate
     for t in threads:
-        t.join()        # wait for terminating child thread t
-        print(t)
-        msg.report(t.sent_bytes, t.recv_bytes)
+        t.join()        # wait for child thread t
+        print(f'{t.getName()} exits')
+

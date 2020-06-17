@@ -13,7 +13,7 @@ Client 마다 connected socket이 탄생하고, 이를 통해 client와 통신�
    1. I/O multiplexing 이용: n+1개의 socket에 대해 readable(데이터 도착했는지) event가 발생했는지 확인하고, 발생된 socket들에 대해 처리. 보통 non-blocking mode의 socket을 처리.
    1. Multi-threading 이용: main thread는 listening socket으로 `accept` 처리, connected socket 마다 동일한 function(or method)를 실행시키는 n개의 thread
    1. Concurrent process 이용: `fork`
-   1. multiprossing module 이용: multi core 능력을 이용하려면 
+   1. multiprossing module 이용: multi core 능력을 이용하려면 (CPU bound job에 적합)
 
 ### No associated terminal users:
 서버는 보통 컴퓨터가 booting할 때 서버 process가 daemon process로 실행된다. 
@@ -43,8 +43,11 @@ events = sel.select(timeout=None)   # wait for events
 발생한 event의 종류는 bit mask로 표현된다. 
 key의 attribute들(`fileobj`, `events`, `data`)에서 `register`한 파라미터들을 access할 수 있다.
 
-### servers/server_select.py
+### servers/server_select0.py
 `register` method의 parameter `data`에 function을 패스함으로써 event가 발생하면 부를 call-back function을 등록한 것이다. listening socket에 대해서는 `accept`, connected socket에 대해서는 수신한 데이터를 그대로 회신하는 `echo` 함수를 정의했다.
+
+### servers/server_select.py
+logging과 exception handling을 추가한 version
 
 ## Multi-threading server
 Client와 connection이 성립되면 이 client와의 데이터 교환을 책임질 function을 target으로 하는 thread를 start시킨다. 
@@ -76,14 +79,14 @@ sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 보통 server는 listening socket으로 client의 connection 요구를 accept하고, thread를 생성하여 새로운 connected socket를 service handler에게 넘겨주기까지 동일한 일을 수행한다. `ThreadingTCPServer` class가 server들의 공통된 작업을 수행하게 coding되어 있다.
 
 실제 client에게 제공할 서비스가 다른 부분은 별도의 handler를 작성하기만 하면 된다.  
-서비스 handler도 공통되는 부분을 `RequestHandler`라는 abstract class로 
+서비스 handler도 공통되는 부분을 `BaseRequestHandler`라는 abstract class로 
 작성되어 있다. Class object 생성될 때, setup, handle, finish까지 모두 수행된다.
 
-`EchoRequestHandler`는 `RequestHandler`에서 상속받아 
+`EchoRequestHandler`는 `StreamRequestHandler`에서 상속받아 
 `handle` method만 구현하면 끝난다. 다른 서비스도 동일한 방법으로 구현 가능하다.
 ```Python
 import server   # server.py
-class NewRequestHandler(RequestHandler):
+class NewRequestHandler(BaseRequestHandler):
     def handle(self):
         # code here ...
 

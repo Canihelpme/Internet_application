@@ -7,7 +7,7 @@ avoid using LF character inside Python strings.
 The POST request messages may be sent periodically
 for server to inform the client to activate the actuators if needed.
 
-<request message> ::= <request object in JSON format with UTF-8 encoding> <LF>
+<request message> ::= <request object> <LF>  # in JSON format with UTF-8 encoding
 
 <request object> ::=
     {   'method': 'POST',
@@ -16,13 +16,18 @@ for server to inform the client to activate the actuators if needed.
         'data': {'temperature': 28.5, 'humidity': 71},
     }
 
-<response message> ::= <response object in JSON format with UTF-8 encoding> <LF>
+<response message> ::= <response object> <LF>  # in JSON format with UTF-8 encoding
 
 <response object> ::=
     {   'status': 'OK' | 'ERROR <error msg>',
-        'deviceid': <device id>
-        'msgid': <messge id>
+        'deviceid': <device id>,
+        'msgid': <messge id>,
       [ 'activate': {'aircon': 'ON', 'led': 'OFF' } ]  # optional
+    } 
+    |                               # or
+    {   'status': 'ERROR <error msg>',
+        'deviceid': <device id>,
+        'msgid': <messge id>,
     }
 
 <LF> ::= b'\n'
@@ -96,11 +101,11 @@ class IoTClient:
         timeout_left = self.time_to_expire - now
         if timeout_left > 0:
             events = self.sel.select(timeout=timeout_left)
-            if events:
+            if events:     # event occurs before timeout
                 return events
         # time to expire elapsed or timeout event occurs
         self.time_to_expire += interval # set next time to expire
-        return []
+        return []          # timeout event
 
 
     def run(self):

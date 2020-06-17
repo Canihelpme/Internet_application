@@ -1,3 +1,6 @@
+'''
+Echo Server using socketserver module
+'''
 import socketserver
 
 class EchoRequestHandler(socketserver.StreamRequestHandler):
