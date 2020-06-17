@@ -26,7 +26,7 @@ def client(server_addr):
     receiver.start()    # start recv_loop thread
 
     # main thread continues hereafter
-    for message in msg.msgs(20, length=2000):
+    for message in msg.msgs(100, length=2000):
         n_sent = sock.send(message)
         sent_bytes.append(n_sent)
         print('send:', n_sent)

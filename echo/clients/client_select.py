@@ -13,7 +13,7 @@ def client(server_addr):
 
     sel = selectors.DefaultSelector()
     sel.register(sock, selectors.EVENT_READ | selectors.EVENT_WRITE)
-    it = msg.msgs(100, length=2000))  # generator is iterable
+    it = msg.msgs(100, length=2000)  # generator is iterable
     sent_bytes = []
     recv_bytes = []
     keep_running = True
@@ -30,7 +30,7 @@ def client(server_addr):
 
             # recv if socket becomes readable
             if mask & selectors.EVENT_READ:
-                data = conn.recv(2048)
+                data = conn.recv(4096)
                 if not data:
                     print('Server closing')
                     sel.unregister(conn)

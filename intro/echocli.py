@@ -12,7 +12,7 @@ def echo_client(server_addr):
             break
         sock.send(message.encode('utf-8'))      # send message to server
         data = sock.recv(1024).decode('utf-8')  # receive response up to 1KB
-        print(data)
+        print(data, end='')
     sock.close()                # send FIN(no more data) and close the socket
     
 if __name__ == '__main__':

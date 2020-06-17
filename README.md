@@ -23,14 +23,15 @@
 - clients.py: running multiple clients for testing servers<br>
     Usage:
     ```bash
-    python clients.py host:port [n]   # run n(=3, default) clients
+    python clients.py host:port <# of messages> [n]   # run n(=3, default) clients
     ```
 
 ### echo/servers/
-- server_select.py: I/O multiplexing
-- server_thread.py: multi-threading
-- server.py: OO approach with multi-threading
-- server_socketserver: using socketserver module
+- server_select0.py: I/O multiplexing version without logging and exception handling
+- server_select.py: I/O multiplexing version
+- server_thread.py: multi-threading version
+- server.py: Generic Threading TCP server with request handlers
+- server_socketserver: Threading TCP server using socketserver module
 
 ## iot/
 - iotclient.py: an IoT client example
