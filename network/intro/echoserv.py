@@ -7,9 +7,9 @@ def echo_server(my_port):
     """Echo Server - iterative"""
 
     sock = socket(AF_INET, SOCK_STREAM) # socket for listening clients' connection
-    sock.bind(('', my_port))        # bind it to my any IP and port number
+    sock.bind(('', my_port))        # bind it to my any IP and port number ''는 그냥 아무 ip나 수신
                                     # '' represents all available interfaces on host
-    sock.listen(5)                  # listen, allow 5 pending connects
+    sock.listen(5)                  # listen, allow 5 pending connects, wait the client connects and accept
     print('Server started:', sock.getsockname())
     while True:                     # do forever (until process killed)
         conn, cli_addr = sock.accept()  # wait for next client connect
