@@ -72,6 +72,7 @@ n_sent = s.send(msg)
 
 - Blocking mode(default)에서는 msg 전부가 send buffer에 저장되어야 return한다.
   - buffer space가 모자라면 block되어 대기하다 모두 저장했을 때 return
+  - nsent 라는 것은 성공적으로 buffering된 바이트 수.(Non blocking socket이라 size는 계속 조절 가능)
 - 참고: Non-blocking mode에서는 가용한 buffer 크기 만큼만 send buffer에 저장할 수 있다. 따라서, 저장하기 성공한 byte 수가 return된다.
 
 > 주의: send가 return되었다 해서 상대방에게 전달된 것은 아니다. TCP가 독립적이며 자율적으로 send buffer의 내용을 segment로 쪼개서 보내게 된다.
